@@ -7,6 +7,7 @@ import {
   serial,
   text,
   timestamp,
+  uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
@@ -50,12 +51,13 @@ export const users = createTable("user", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
+  likedSongs: many(likedSongs),
 }));
 
 export const accounts = createTable(
   "account",
   {
-    userId: varchar("userId", { length: 255 })
+    userId: varchar("user_id", { length: 255 })
       .notNull()
       .references(() => users.id),
     type: varchar("type", { length: 255 })
@@ -89,7 +91,7 @@ export const sessions = createTable(
     sessionToken: varchar("sessionToken", { length: 255 })
       .notNull()
       .primaryKey(),
-    userId: varchar("userId", { length: 255 })
+    userId: varchar("user_id", { length: 255 })
       .notNull()
       .references(() => users.id),
     expires: timestamp("expires", { mode: "date" }).notNull(),
@@ -114,3 +116,137 @@ export const verificationTokens = createTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
 );
+
+export const likedSongs = createTable(
+  "likedSong",
+  {
+    songId: varchar("song_id", { length: 255 })
+      .notNull()
+      .references(() => songs.songId),
+    userId: varchar("user_id", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+  },
+  (likedSong) => ({
+    songIdIdx: index("likedSong_songId_idx").on(likedSong.songId),
+    userIdIdx: index("likedSong_userId_idx").on(likedSong.userId),
+    compoundKey: primaryKey({
+      columns: [likedSong.songId, likedSong.userId],
+    }),
+  })
+);
+
+export const likedSongsRelations = relations(likedSongs, ({ one }) => ({
+  song: one(songs, { fields: [likedSongs.songId], references: [songs.songId] }),
+  user: one(users, { fields: [likedSongs.userId], references: [users.id] }),
+}));
+
+export const songs = createTable(
+  "song",
+  {
+    songId: varchar("song_id", { length: 255 }).notNull().primaryKey(),
+    previewURL: varchar("preview_url", { length: 255 }),
+    name: varchar("name", { length: 255 }).notNull(),
+  },
+  (likedSong) => ({
+    songIdIdx: index("likedSong_artistId_idx").on(likedSong.songId),
+  })
+);
+
+export const songsRelations = relations(songs, ({ many }) => ({
+  artists: many(songArtists),
+  likedSongs: many(likedSongs),
+}));
+
+export const songArtists = createTable(
+  "songArtist",
+  {
+    songId: varchar("song_id", { length: 255 })
+      .notNull()
+      .references(() => songs.songId),
+    artistId: varchar("artist_id", { length: 255 })
+      .notNull()
+      .references(() => artists.artistId),
+  },
+  (songArtist) => ({
+    songIdIdx: index("songArtist_songId_idx").on(songArtist.songId),
+    artistIdIdx: index("songArtist_artistId_idx").on(songArtist.artistId),
+    compoundKey: primaryKey({
+      columns: [songArtist.songId, songArtist.artistId],
+    }),
+  })
+);
+
+export const songArtistsRelations = relations(songArtists, ({ one }) => ({
+  song: one(songs, { fields: [songArtists.songId], references: [songs.songId] }),
+  artist: one(artists, {
+    fields: [songArtists.artistId],
+    references: [artists.artistId],
+  }),
+}));
+
+export const artists = createTable(
+  "artist",
+  {
+    artistId: varchar("artist_id", { length: 255 }).notNull().primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+  },
+  (artist) => ({
+    idIdx: index("artist_id_idx").on(artist.artistId),
+  })
+);
+
+export const artistsRelations = relations(artists, ({ many, one }) => ({
+  images: one(artistImages, { fields: [artists.artistId], references: [artistImages.artistId] }),
+  songArtists: many(songArtists),
+  relatedArtists: many(artistsRelatedArtists),
+}));
+
+export const artistImages = createTable(
+  "artistImage",
+  {
+    artistId: varchar("artist_id", { length: 255 })
+      .notNull()
+      .references(() => artists.artistId),
+    url: varchar("url", { length: 255 }).notNull(),
+    height: integer("height").notNull(),
+    width: integer("width").notNull(),
+  },
+  (artistImage) => ({
+    artistIdIdx: index("artistImage_artistId_idx").on(artistImage.artistId),
+  })
+);
+
+export const artistImagesRelations = relations(artistImages, ({ one }) => ({
+  artist: one(artists, { fields: [artistImages.artistId], references: [artists.artistId] }),
+}));
+
+export const artistsRelatedArtists = createTable(
+  "artistRelatedArtist",
+  {
+    artistId: varchar("artist_id", { length: 255 })
+      .notNull()
+      .references(() => artists.artistId),
+    relatedArtistId: varchar("related_artist_id", { length: 255 })
+      .notNull()
+      .references(() => artists.artistId),
+  },
+  (artistRelatedArtist) => ({
+    artistIdIdx: index("artistRelatedArtist_artistId_idx").on(artistRelatedArtist.artistId),
+    relatedArtistIdIdx: index("artistRelatedArtist_relatedArtistId_idx").on(artistRelatedArtist.relatedArtistId),
+    compoundKey: primaryKey({
+      columns: [artistRelatedArtist.artistId, artistRelatedArtist.relatedArtistId],
+    }),
+    compoundKeyReverse: primaryKey({
+      columns: [artistRelatedArtist.relatedArtistId, artistRelatedArtist.artistId],
+    }),
+  })
+);
+
+export const artistsRelatedArtistsRelations = relations(artistsRelatedArtists, ({ one }) => ({
+  artist: one(artists, { fields: [artistsRelatedArtists.artistId], references: [artists.artistId] }),
+  relatedArtist: one(artists, { fields: [artistsRelatedArtists.relatedArtistId], references: [artists.artistId] }),
+}));
+
+
+

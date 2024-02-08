@@ -1,0 +1,663 @@
+{
+  "id": "da5a3ead-e004-4a57-a0f4-90f58cec5d11",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "artistree_account": {
+      "name": "artistree_account",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "providerAccountId": {
+          "name": "providerAccountId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "access_token": {
+          "name": "access_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "token_type": {
+          "name": "token_type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_token": {
+          "name": "id_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "session_state": {
+          "name": "session_state",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "account_userId_idx": {
+          "name": "account_userId_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "artistree_account_user_id_artistree_user_id_fk": {
+          "name": "artistree_account_user_id_artistree_user_id_fk",
+          "tableFrom": "artistree_account",
+          "tableTo": "artistree_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "artistree_account_provider_providerAccountId_pk": {
+          "name": "artistree_account_provider_providerAccountId_pk",
+          "columns": [
+            "provider",
+            "providerAccountId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "artistree_artistImage": {
+      "name": "artistree_artistImage",
+      "schema": "",
+      "columns": {
+        "artist_id": {
+          "name": "artist_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "height": {
+          "name": "height",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "width": {
+          "name": "width",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "artistImage_artistId_idx": {
+          "name": "artistImage_artistId_idx",
+          "columns": [
+            "artist_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "artistree_artistImage_artist_id_artistree_artist_artist_id_fk": {
+          "name": "artistree_artistImage_artist_id_artistree_artist_artist_id_fk",
+          "tableFrom": "artistree_artistImage",
+          "tableTo": "artistree_artist",
+          "columnsFrom": [
+            "artist_id"
+          ],
+          "columnsTo": [
+            "artist_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artistree_artist": {
+      "name": "artistree_artist",
+      "schema": "",
+      "columns": {
+        "artist_id": {
+          "name": "artist_id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "artist_id_idx": {
+          "name": "artist_id_idx",
+          "columns": [
+            "artist_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artistree_artistRelatedArtist": {
+      "name": "artistree_artistRelatedArtist",
+      "schema": "",
+      "columns": {
+        "artist_id": {
+          "name": "artist_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "related_artist_id": {
+          "name": "related_artist_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "artistRelatedArtist_artistId_idx": {
+          "name": "artistRelatedArtist_artistId_idx",
+          "columns": [
+            "artist_id"
+          ],
+          "isUnique": false
+        },
+        "artistRelatedArtist_relatedArtistId_idx": {
+          "name": "artistRelatedArtist_relatedArtistId_idx",
+          "columns": [
+            "related_artist_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "artistree_artistRelatedArtist_artist_id_artistree_artist_artist_id_fk": {
+          "name": "artistree_artistRelatedArtist_artist_id_artistree_artist_artist_id_fk",
+          "tableFrom": "artistree_artistRelatedArtist",
+          "tableTo": "artistree_artist",
+          "columnsFrom": [
+            "artist_id"
+          ],
+          "columnsTo": [
+            "artist_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "artistree_artistRelatedArtist_related_artist_id_artistree_artist_artist_id_fk": {
+          "name": "artistree_artistRelatedArtist_related_artist_id_artistree_artist_artist_id_fk",
+          "tableFrom": "artistree_artistRelatedArtist",
+          "tableTo": "artistree_artist",
+          "columnsFrom": [
+            "related_artist_id"
+          ],
+          "columnsTo": [
+            "artist_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "artistree_artistRelatedArtist_artist_id_related_artist_id_pk": {
+          "name": "artistree_artistRelatedArtist_artist_id_related_artist_id_pk",
+          "columns": [
+            "artist_id",
+            "related_artist_id"
+          ]
+        },
+        "artistree_artistRelatedArtist_related_artist_id_artist_id_pk": {
+          "name": "artistree_artistRelatedArtist_related_artist_id_artist_id_pk",
+          "columns": [
+            "related_artist_id",
+            "artist_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "artistree_likedSong": {
+      "name": "artistree_likedSong",
+      "schema": "",
+      "columns": {
+        "song_id": {
+          "name": "song_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "likedSong_songId_idx": {
+          "name": "likedSong_songId_idx",
+          "columns": [
+            "song_id"
+          ],
+          "isUnique": false
+        },
+        "likedSong_userId_idx": {
+          "name": "likedSong_userId_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "artistree_likedSong_song_id_artistree_song_song_id_fk": {
+          "name": "artistree_likedSong_song_id_artistree_song_song_id_fk",
+          "tableFrom": "artistree_likedSong",
+          "tableTo": "artistree_song",
+          "columnsFrom": [
+            "song_id"
+          ],
+          "columnsTo": [
+            "song_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "artistree_likedSong_user_id_artistree_user_id_fk": {
+          "name": "artistree_likedSong_user_id_artistree_user_id_fk",
+          "tableFrom": "artistree_likedSong",
+          "tableTo": "artistree_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "artistree_likedSong_song_id_user_id_pk": {
+          "name": "artistree_likedSong_song_id_user_id_pk",
+          "columns": [
+            "song_id",
+            "user_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "artistree_post": {
+      "name": "artistree_post",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdById": {
+          "name": "createdById",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "createdById_idx": {
+          "name": "createdById_idx",
+          "columns": [
+            "createdById"
+          ],
+          "isUnique": false
+        },
+        "name_idx": {
+          "name": "name_idx",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "artistree_post_createdById_artistree_user_id_fk": {
+          "name": "artistree_post_createdById_artistree_user_id_fk",
+          "tableFrom": "artistree_post",
+          "tableTo": "artistree_user",
+          "columnsFrom": [
+            "createdById"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artistree_session": {
+      "name": "artistree_session",
+      "schema": "",
+      "columns": {
+        "sessionToken": {
+          "name": "sessionToken",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "session_userId_idx": {
+          "name": "session_userId_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "artistree_session_user_id_artistree_user_id_fk": {
+          "name": "artistree_session_user_id_artistree_user_id_fk",
+          "tableFrom": "artistree_session",
+          "tableTo": "artistree_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artistree_songArtist": {
+      "name": "artistree_songArtist",
+      "schema": "",
+      "columns": {
+        "song_id": {
+          "name": "song_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "artist_id": {
+          "name": "artist_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "songArtist_songId_idx": {
+          "name": "songArtist_songId_idx",
+          "columns": [
+            "song_id"
+          ],
+          "isUnique": false
+        },
+        "songArtist_artistId_idx": {
+          "name": "songArtist_artistId_idx",
+          "columns": [
+            "artist_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "artistree_songArtist_song_id_artistree_song_song_id_fk": {
+          "name": "artistree_songArtist_song_id_artistree_song_song_id_fk",
+          "tableFrom": "artistree_songArtist",
+          "tableTo": "artistree_song",
+          "columnsFrom": [
+            "song_id"
+          ],
+          "columnsTo": [
+            "song_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "artistree_songArtist_artist_id_artistree_artist_artist_id_fk": {
+          "name": "artistree_songArtist_artist_id_artistree_artist_artist_id_fk",
+          "tableFrom": "artistree_songArtist",
+          "tableTo": "artistree_artist",
+          "columnsFrom": [
+            "artist_id"
+          ],
+          "columnsTo": [
+            "artist_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "artistree_songArtist_song_id_artist_id_pk": {
+          "name": "artistree_songArtist_song_id_artist_id_pk",
+          "columns": [
+            "song_id",
+            "artist_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "artistree_song": {
+      "name": "artistree_song",
+      "schema": "",
+      "columns": {
+        "song_id": {
+          "name": "song_id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "preview_url": {
+          "name": "preview_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "likedSong_artistId_idx": {
+          "name": "likedSong_artistId_idx",
+          "columns": [
+            "song_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artistree_user": {
+      "name": "artistree_user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "emailVerified": {
+          "name": "emailVerified",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "image": {
+          "name": "image",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artistree_verificationToken": {
+      "name": "artistree_verificationToken",
+      "schema": "",
+      "columns": {
+        "identifier": {
+          "name": "identifier",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "artistree_verificationToken_identifier_token_pk": {
+          "name": "artistree_verificationToken_identifier_token_pk",
+          "columns": [
+            "identifier",
+            "token"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
