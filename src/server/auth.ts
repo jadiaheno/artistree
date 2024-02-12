@@ -13,6 +13,7 @@ import SpotifyProvider, {
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { createTable } from "~/server/db/schema";
+import { likedSongsQueue } from "./queues/likedSongs";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -78,6 +79,18 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  events: {
+    signIn: async ({ user, account, isNewUser }) => {
+      isNewUser &&
+        account &&
+        account.provider === "spotify" &&
+        account.access_token &&
+        (await likedSongsQueue.add({
+          userId: user.id,
+          access_token: account.access_token,
+        }));
+    },
+  },
 };
 
 /**
@@ -91,5 +104,3 @@ export const getServerAuthSession = (ctx: {
 }) => {
   return getServerSession(ctx.req, ctx.res, authOptions);
 };
-
-

@@ -1,0 +1,22 @@
+---
+services:
+  postgres:
+    container_name: artistree-postgres
+    environment:
+      POSTGRES_DB: artistree
+      POSTGRES_PASSWORD: ar7157R33
+    image: postgres
+    volumes:
+      - ./drizzle:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+  redis:
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    image: docker.io/bitnami/redis:7.2
+    ports:
+      - "6379:6379"
+# Docker Compose file with two services: postgres and redis
+version: "3"

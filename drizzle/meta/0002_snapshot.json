@@ -1,6 +1,6 @@
 {
-  "id": "40b30651-0938-4876-86c9-94efdd303111",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "5bb7aebd-540b-4761-97ee-d175dd3e3d88",
+  "prevId": "3f2255ee-d8b7-4add-a73c-d58f6a3de89a",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -8,8 +8,8 @@
       "name": "artistree_account",
       "schema": "",
       "columns": {
-        "userId": {
-          "name": "userId",
+        "user_id": {
+          "name": "user_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -79,18 +79,18 @@
         "account_userId_idx": {
           "name": "account_userId_idx",
           "columns": [
-            "userId"
+            "user_id"
           ],
           "isUnique": false
         }
       },
       "foreignKeys": {
-        "artistree_account_userId_artistree_user_id_fk": {
-          "name": "artistree_account_userId_artistree_user_id_fk",
+        "artistree_account_user_id_artistree_user_id_fk": {
+          "name": "artistree_account_user_id_artistree_user_id_fk",
           "tableFrom": "artistree_account",
           "tableTo": "artistree_user",
           "columnsFrom": [
-            "userId"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -346,76 +346,6 @@
           ]
         }
       },
-      "uniqueConstraints": {}
-    },
-    "artistree_post": {
-      "name": "artistree_post",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "createdById": {
-          "name": "createdById",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "createdById_idx": {
-          "name": "createdById_idx",
-          "columns": [
-            "createdById"
-          ],
-          "isUnique": false
-        },
-        "name_idx": {
-          "name": "name_idx",
-          "columns": [
-            "name"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "artistree_post_createdById_artistree_user_id_fk": {
-          "name": "artistree_post_createdById_artistree_user_id_fk",
-          "tableFrom": "artistree_post",
-          "tableTo": "artistree_user",
-          "columnsFrom": [
-            "createdById"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "artistree_session": {

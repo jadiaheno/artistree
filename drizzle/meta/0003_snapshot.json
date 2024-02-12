@@ -1,6 +1,6 @@
 {
-  "id": "40b30651-0938-4876-86c9-94efdd303111",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "cfae871b-0260-4ea0-94ed-69559a1e8620",
+  "prevId": "5bb7aebd-540b-4761-97ee-d175dd3e3d88",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -428,8 +428,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
+        "userId": {
+          "name": "userId",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -445,18 +445,18 @@
         "session_userId_idx": {
           "name": "session_userId_idx",
           "columns": [
-            "user_id"
+            "userId"
           ],
           "isUnique": false
         }
       },
       "foreignKeys": {
-        "artistree_session_user_id_artistree_user_id_fk": {
-          "name": "artistree_session_user_id_artistree_user_id_fk",
+        "artistree_session_userId_artistree_user_id_fk": {
+          "name": "artistree_session_userId_artistree_user_id_fk",
           "tableFrom": "artistree_session",
           "tableTo": "artistree_user",
           "columnsFrom": [
-            "user_id"
+            "userId"
           ],
           "columnsTo": [
             "id"

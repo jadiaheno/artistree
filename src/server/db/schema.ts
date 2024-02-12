@@ -7,7 +7,6 @@ import {
   serial,
   text,
   timestamp,
-  uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
@@ -51,13 +50,12 @@ export const users = createTable("user", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
-  likedSongs: many(likedSongs),
 }));
 
 export const accounts = createTable(
   "account",
   {
-    userId: varchar("user_id", { length: 255 })
+    userId: varchar("userId", { length: 255 })
       .notNull()
       .references(() => users.id),
     type: varchar("type", { length: 255 })
@@ -91,7 +89,7 @@ export const sessions = createTable(
     sessionToken: varchar("sessionToken", { length: 255 })
       .notNull()
       .primaryKey(),
-    userId: varchar("user_id", { length: 255 })
+    userId: varchar("userId", { length: 255 })
       .notNull()
       .references(() => users.id),
     expires: timestamp("expires", { mode: "date" }).notNull(),
@@ -237,9 +235,7 @@ export const artistsRelatedArtists = createTable(
     compoundKey: primaryKey({
       columns: [artistRelatedArtist.artistId, artistRelatedArtist.relatedArtistId],
     }),
-    compoundKeyReverse: primaryKey({
-      columns: [artistRelatedArtist.relatedArtistId, artistRelatedArtist.artistId],
-    }),
+    artistRelatedArtist: index("artistRelatedArtist_artistRelatedArtist_idx").on(artistRelatedArtist.artistId, artistRelatedArtist.relatedArtistId),
   })
 );
 

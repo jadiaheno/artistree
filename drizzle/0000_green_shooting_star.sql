@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "artistree_account" (
-	"user_id" varchar(255) NOT NULL,
+	"userId" varchar(255) NOT NULL,
 	"type" varchar(255) NOT NULL,
 	"provider" varchar(255) NOT NULL,
 	"providerAccountId" varchar(255) NOT NULL,
@@ -78,11 +78,12 @@ CREATE TABLE IF NOT EXISTS "artistree_verificationToken" (
 	CONSTRAINT "artistree_verificationToken_identifier_token_pk" PRIMARY KEY("identifier","token")
 );
 --> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "account_userId_idx" ON "artistree_account" ("user_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "account_userId_idx" ON "artistree_account" ("userId");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "artistImage_artistId_idx" ON "artistree_artistImage" ("artist_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "artist_id_idx" ON "artistree_artist" ("artist_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "artistRelatedArtist_artistId_idx" ON "artistree_artistRelatedArtist" ("artist_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "artistRelatedArtist_relatedArtistId_idx" ON "artistree_artistRelatedArtist" ("related_artist_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "artistRelatedArtist_artistRelatedArtist_idx" ON "artistree_artistRelatedArtist" ("artist_id","related_artist_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "likedSong_songId_idx" ON "artistree_likedSong" ("song_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "likedSong_userId_idx" ON "artistree_likedSong" ("user_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "createdById_idx" ON "artistree_post" ("createdById");--> statement-breakpoint
@@ -92,7 +93,7 @@ CREATE INDEX IF NOT EXISTS "songArtist_songId_idx" ON "artistree_songArtist" ("s
 CREATE INDEX IF NOT EXISTS "songArtist_artistId_idx" ON "artistree_songArtist" ("artist_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "likedSong_artistId_idx" ON "artistree_song" ("song_id");--> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "artistree_account" ADD CONSTRAINT "artistree_account_user_id_artistree_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "artistree_user"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "artistree_account" ADD CONSTRAINT "artistree_account_userId_artistree_user_id_fk" FOREIGN KEY ("userId") REFERENCES "artistree_user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
